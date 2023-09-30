@@ -1,12 +1,18 @@
 const express=require("express");
 const { connection } = require("./db");
-const cors=require("cors")
+const cors=require("cors");
+const userRouter = require("./routes/UserRoutes");
+const rateLimitMiddleware = require("./middlewares/RateLimitMiddleware");
 require("dotenv").config();
 
 const app=express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use(rateLimitMiddleware);
+
+app.use("/users", userRouter)
 
 app.listen(process.env.PORT,async()=>{
     try{
