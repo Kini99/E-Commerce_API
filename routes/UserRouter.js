@@ -43,11 +43,11 @@ userRouter.post('/login', async (req, res) => {
     if (!validPassword) {
         return res.status(401).json({ error: 'Invalid password' });
     }
-    const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
 
-    const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET);
+    // const refreshToken = jwt.sign({ userId: user._id }, process.env.REFRESH_TOKEN_SECRET);
 
-    res.json({ accessToken, refreshToken });
+    res.json({ token });
 });
 
 userRouter.post('/logout', async (req, res) => {
@@ -59,18 +59,18 @@ userRouter.post('/logout', async (req, res) => {
     res.json({ message: 'Logout successful' });
 });
 
-userRouter.post('/refresh', async (req, res) => {
-    const { refreshToken } = req.body;
+// userRouter.post('/refresh', async (req, res) => {
+//     const { refreshToken } = req.body;
 
-    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
-        if (err) {
-            return res.status(401).json({ error: 'Invalid refresh token' });
-        }
+//     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+//         if (err) {
+//             return res.status(401).json({ error: 'Invalid refresh token' });
+//         }
 
-        const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+//         const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '3h' });
 
-        res.json({ accessToken });
-    });
-});
+//         res.json({ accessToken });
+//     });
+// });
 
 module.exports = userRouter;
