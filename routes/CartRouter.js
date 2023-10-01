@@ -16,24 +16,23 @@ cartRouter.get('/cart', authMiddleware, async (req, res) => {
 
 cartRouter.post('/cart/add', authMiddleware, async (req, res) => {
   const userId = req.user.userId;
-  const { productId, quantity, price } = req.body;
+  const { productId, quantity, title, price, image } = req.body;
   try {
     const cart = await Cart.findOne({ userId });
     if (!cart) {
-      cart = new Cart({ userId, items: [{ productId, quantity, price, total:quantity*price }], total: quantity*price});
+      cart = new Cart({ userId, items: [{ productId, quantity, title, price, image, total: quantity * price }], total: quantity * price });
     }
     const existing = cart.items.find((item) => item.productId === productId)
     if (existing) {
       existing.quantity += quantity;
-      existing.total=existing.quantity*existing.price;
+      existing.total = existing.quantity * existing.price;
     } else {
-      cart.items.push({ productId, quantity, price, total:quantity*price });
+      cart.items.push({ productId, quantity, title, price, image, total: quantity * price });
     }
     cart.total = cart.items.reduce((total, item) => total + item.total, 0);
     await cart.save();
     res.json(cart);
   } catch (error) {
-    console.log(error)
     res.status(500).json({ error: 'Error Adding Cart' });
   }
 });
@@ -50,7 +49,7 @@ cartRouter.post('/cart/update/:productId', authMiddleware, async (req, res) => {
     const cartItem = cart.items.find((item) => item.productId === productId);
     if (cartItem) {
       cartItem.quantity = quantity;
-      cartItem.total=cartItem.quantity*cartItem.price;
+      cartItem.total = cartItem.quantity * cartItem.price;
       cart.total = cart.items.reduce((total, item) => total + item.total, 0);
       await cart.save();
       res.json(cart);
@@ -58,7 +57,6 @@ cartRouter.post('/cart/update/:productId', authMiddleware, async (req, res) => {
       return res.status(404).json({ error: "Item not found!" })
     }
   } catch (error) {
-    console.log(error)
     res.status(500).json({ error: 'Error updating Cart Item' });
   }
 });
@@ -77,7 +75,6 @@ cartRouter.post('/cart/remove/:productId', authMiddleware, async (req, res) => {
     await cart.save();
     res.json(cart);
   } catch (error) {
-    console.log(error)
     res.status(500).json({ error: 'Error deleting Cart Item' });
   }
 });
