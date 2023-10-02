@@ -32,7 +32,7 @@ This project provides a RESTful API for e-commerce operations such as product an
 - Node.js
 - Express.js
 - MongoDB
-- Mongoose ODM
+- Mongoose
 - JSON Web Tokens (JWT) for Authentication
 - Bcrypt for Password Hashing
 - Express Rate Limiting
