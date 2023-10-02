@@ -3,7 +3,12 @@ const Blacklist = require('../models/BlackListModel');
 require("dotenv").config();
 
 const authMiddleware = async (req, res, next) => {
-  const token = req.header('Authorization').split(' ')[1];
+  const authorizationHeader = req.header('Authorization');
+  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Access denied, token required' });
+  }
+
+  const token = authorizationHeader.split(' ')[1];
   if (!token) {
     return res.status(401).json({ error: 'Access denied, token required' });
   }

@@ -1,6 +1,8 @@
 const express = require("express");
 const { connection } = require("./db");
 const cors = require("cors");
+const swaggerJSdoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
 const rateLimitMiddleware = require("./middlewares/RateLimitMiddleware");
 const userRouter = require("./routes/UserRouter");
 const categoryRouter = require("./routes/CategoryRouter");
@@ -13,6 +15,33 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+const options={
+    definition:{
+        openapi:"3.0.0",
+        info:{
+            title:"E-commerce API",
+            version:"1.0.0"
+        },
+        servers:[
+            {
+                url:`http://localhost:${process.env.PORT}`
+            }
+        ]
+    },
+    apis:["./routes/*.js"]
+};
+
+const openAPIspec=swaggerJSdoc(options);
+
+// Swagger Documentation API Endpoint
+app.use("/docs",swaggerUI.serve, swaggerUI.setup(openAPIspec));
+
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', '*'); 
+//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//     next();
+//   });
 
 app.use(rateLimitMiddleware);
 
