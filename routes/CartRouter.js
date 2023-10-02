@@ -279,7 +279,7 @@ cartRouter.patch('/cart/update/:productId', authMiddleware, async (req, res) => 
 /**
  * @swagger
  *  /cart/remove/{productId}:
- *    post:
+ *    delete:
  *      summary: Remove product from the user's cart
  *      tags:
  *          - Cart
@@ -321,7 +321,7 @@ cartRouter.patch('/cart/update/:productId', authMiddleware, async (req, res) => 
  *                    example: 'Error deleting Cart Item'
  */
 
-cartRouter.post('/cart/remove/:productId', authMiddleware, async (req, res) => {
+cartRouter.delete('/cart/remove/:productId', authMiddleware, async (req, res) => {
   const userId = req.user.userId;
   const productId = req.params.productId;
 
@@ -330,7 +330,7 @@ cartRouter.post('/cart/remove/:productId', authMiddleware, async (req, res) => {
     if (!cart) {
       return res.status(404).json({ error: "Cart not found!" })
     }
-    cart.items = cart.items.filter((item) => !item.productId === productId);
+    cart.items = cart.items.filter((item) => item.productId !== productId);
     cart.total = cart.items.reduce((total, item) => total + item.total, 0);
     await cart.save();
     res.json(cart);
