@@ -16,6 +16,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.set('trust proxy', true);
+
 const options={
     definition:{
         openapi:"3.0.0",
@@ -36,12 +38,6 @@ const openAPIspec=swaggerJSdoc(options);
 
 // Swagger Documentation API Endpoint
 app.use("/docs",swaggerUI.serve, swaggerUI.setup(openAPIspec));
-
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', '*'); 
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//     next();
-//   });
 
 app.use(rateLimitMiddleware);
 
