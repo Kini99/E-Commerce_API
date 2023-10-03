@@ -12,6 +12,7 @@ This project provides a RESTful API for e-commerce operations such as product an
   - [Installation](#installation)
 - [API Documentation](#api-documentation)
 - [Usage](#usage)
+- [Project Demo Link](#project-demo-link)
 
 ## Features
 
@@ -85,3 +86,9 @@ http://localhost:8080/docs/
 
 ## Usage
 Use Postman or any API testing tool to test the various API endpoints.
+
+## Project Demo Link
+
+Please find short video explaining the features, endpoints and usage of swagger documentation at the link mentioned below:- 
+
+https://drive.google.com/file/d/1oNGS-d8EkFmiTM8jZwEpzwK1wAxllndw/view?usp=drivesdk
